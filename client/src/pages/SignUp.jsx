@@ -51,8 +51,7 @@ const SignUp = () => {
             Blog
           </Link>
           <p className="text-sm mt-5">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae vel
-            impedit ipsa blanditiis dolorum dignissimos.
+            This is a demo project You can sign up with your email and password
           </p>
         </div>
         {/* right */}
@@ -104,7 +103,7 @@ const SignUp = () => {
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span className="text-blue-500">Have an account</span>
-            <Link to="sign-in/">Sign In</Link>
+            <Link to="/sign-in">Sign In</Link>
           </div>
           {errorMessage && (
             <Alert className="mt-5 " color="failure">
