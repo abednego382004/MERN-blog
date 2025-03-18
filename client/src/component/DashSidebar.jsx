@@ -8,7 +8,7 @@ export default function DashSidebar() {
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
-          <Link to="dashboard?tab=profile">
+          <Link to="?tab=profile">
             <Sidebar.Item active icon={HiUser} label={"User"} labelColor="dark">
               Profile
             </Sidebar.Item>
