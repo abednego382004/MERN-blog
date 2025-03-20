@@ -1,0 +1,9 @@
+import express from "express";
+import { verifyToken } from "../utils/verifyUser.js";
+import { create } from "../controllers/postControllers.js";
+
+const postRouter = express.Router();
+
+postRouter.post("/create", verifyToken, create);
+
+export default postRouter;
