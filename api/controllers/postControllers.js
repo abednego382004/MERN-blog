@@ -1,3 +1,4 @@
+import upload from "../middleware/upload.js";
 import Post from "../models/postModel.js";
 import { errorHandler } from "../utils/error.js";
 
@@ -24,4 +25,20 @@ export const create = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+export const imageUpload = async (req, res, next) => {
+  upload.single("image")(req, res, async function (err) {
+    if (err) {
+      console.log(err);
+
+      return res.status(400).json({ error: err.message });
+    }
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    // Return Cloudinary URL to frontend
+    res.status(200).json({ imageUrl: req.file.path });
+  });
 };
