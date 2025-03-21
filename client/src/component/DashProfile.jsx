@@ -16,8 +16,6 @@ import { Link } from "react-router-dom";
 export default function DashProfile() {
   const { currentUser, error, loading } = useSelector((state) => state.user);
 
-  console.log(currentUser.profilePicture);
-
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [formData, setFormdata] = useState({});
