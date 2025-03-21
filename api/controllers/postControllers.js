@@ -6,9 +6,13 @@ export const create = async (req, res, next) => {
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "You are not allowed to create a post"));
   }
+
   if (!req.body.title || !req.body.content) {
     return next(errorHandler(400, "please provide all required fields"));
   }
+
+  console.log("Received image:", req.body.image);
+
   const slug = req.body.title
     .split(" ")
     .join("-")
@@ -18,6 +22,9 @@ export const create = async (req, res, next) => {
     ...req.body,
     slug,
     userId: req.user.id,
+    Image:
+      req.body.image ||
+      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGJsb2d8ZW58MHx8MHx8fDA%3D",
   });
   try {
     const savedPost = await newPost.save();
