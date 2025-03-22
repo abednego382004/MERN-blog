@@ -6,22 +6,45 @@ import {
   Spinner,
   TextInput,
 } from "flowbite-react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export default function CreatePost() {
+export default function UpdatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setimageUploadProgress] = useState(false);
   const [imageUploadError, setimageUploadError] = useState(null);
   const [UIformData, setUIFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
 
-  console.log("UIformData", UIformData);
+  const { postId } = useParams();
+
+  const { currentUser } = useSelector((state) => state.user);
 
   const quillRef = useRef(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    try {
+      const fetchPost = async () => {
+        const res = await fetch(`/api/post/getposts?postId=${postId}`);
+        const data = await res.json();
+        if (!res.ok) {
+          console.log(data.message);
+          setPublishError(data.message);
+          return;
+        } else {
+          setPublishError(null);
+          setUIFormData(data.posts[0]);
+        }
+      };
+      fetchPost();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [postId]);
 
   const handleUploadImage = async () => {
     try {
@@ -57,11 +80,14 @@ export default function CreatePost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/post/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(UIformData),
-      });
+      const res = await fetch(
+        `/api/post/updatepost/${UIformData._id}/${currentUser._id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(UIformData),
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         setPublishError(data.message);
@@ -79,7 +105,7 @@ export default function CreatePost() {
 
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl my-7 font-semibold">Create a post</h1>
+      <h1 className="text-center text-3xl my-7 font-semibold">Update a post</h1>
       <form className="flex flex-col gap-4 " onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
@@ -91,11 +117,13 @@ export default function CreatePost() {
             onChange={(e) => {
               setUIFormData({ ...UIformData, title: e.target.value });
             }}
+            value={UIformData.title}
           />
           <Select
             onChange={(e) =>
               setUIFormData({ ...UIformData, category: e.target.value })
             }
+            value={UIformData.category}
           >
             <option value="uncategorized">Select a category</option>
             <option value="javascript">Javascript</option>
@@ -134,6 +162,7 @@ export default function CreatePost() {
           />
         )}
         <ReactQuill
+          value={UIformData.content}
           ref={quillRef}
           theme="snow"
           placeholder="Write Something"
@@ -143,7 +172,7 @@ export default function CreatePost() {
           }}
         />
         <Button type="submit" gradientDuoTone="purpleToPink">
-          Publish
+          Update post
         </Button>
         {publishError && (
           <Alert className="mt-5" color="failure">
