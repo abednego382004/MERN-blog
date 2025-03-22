@@ -9,7 +9,7 @@ export default function DashUsers() {
   const [users, setUsers] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
-  const [uerIdToDelete, setUserIdToDelete] = useState("");
+  const [userIdToDelete, setUserIdToDelete] = useState("");
 
   const handleShowMore = async () => {
     const startIndex = users.length;
@@ -27,27 +27,22 @@ export default function DashUsers() {
     }
   };
 
-  //   const handleDeleteUser = async () => {
-  //     setShowModal(false);
-  //     try {
-  //       const res = await fetch(
-  //         `/api/user/deleteuser/${userIdToDelete}/${currentUser._id}`,
-  //         { method: "DELETE" }
-  //       );
-  //       const data = await res.json();
-  //       if (!res.ok) {
-  //         console.log(data.message);
-  //       } else {
-  //         setUsers((prev) =>
-  //           prev.filter((post) => post._id !== postIdToDelete)
-  //         );
-  //       }
-  //     } catch (error) {
-  //       console.log(error.message);
-  //     }
-  //   };
-
-  const handleDeleteUser = () => {};
+  const handleDeleteUser = async () => {
+    try {
+      const res = await fetch(`api/user/delete/${userIdToDelete}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
+        setShowModal(false);
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
