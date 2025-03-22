@@ -19,6 +19,8 @@ export default function UpdatePost() {
   const [UIformData, setUIFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
 
+  console.log(UIformData);
+
   const { postId } = useParams();
 
   const { currentUser } = useSelector((state) => state.user);
@@ -69,7 +71,7 @@ export default function UpdatePost() {
         setimageUploadError(data.error);
       }
       setimageUploadProgress(false);
-      setUIFormData({ ...UIformData, image: data.imageUrl });
+      setUIFormData({ ...UIformData, Image: data.imageUrl });
     } catch (error) {
       setimageUploadError("image upload failed");
       setimageUploadProgress(false);
@@ -81,7 +83,7 @@ export default function UpdatePost() {
     e.preventDefault();
     try {
       const res = await fetch(
-        `/api/post/updatepost/${UIformData._id}/${currentUser._id}`,
+        `/api/post/updatepost/${postId}/${currentUser._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -154,9 +156,9 @@ export default function UpdatePost() {
           </Button>
         </div>
         {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
-        {UIformData.image && (
+        {UIformData.Image && (
           <img
-            src={UIformData.image}
+            src={UIformData.Image}
             alt="upload"
             className="w-full h-72 object-cover"
           />

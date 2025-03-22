@@ -99,7 +99,7 @@ export const getPost = async (req, res, next) => {
 };
 
 export const deletePost = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to delete the post"));
   }
   try {
@@ -111,10 +111,13 @@ export const deletePost = async (req, res, next) => {
 };
 
 export const updatePost = async (req, res, next) => {
-  if (!req.user.isAdmin || req.user.id !== req.params.userId) {
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to update this post"));
   }
+
   try {
+    console.log(req.params.postId);
+
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.postId,
       {
