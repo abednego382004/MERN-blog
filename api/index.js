@@ -5,6 +5,7 @@ import userRoutes from "./routes/userRoute.js";
 import authRouter from "./routes/authRoute.js";
 import cookieParser from "cookie-parser";
 import postRouter from "./routes/postRoute.js";
+import commentRouter from "./routes/commentRoutes.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ mongoose
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
+app.use("/api/comment", commentRouter);
 
 app.listen(5000, () => {
   console.log("api is running on port 5000");
