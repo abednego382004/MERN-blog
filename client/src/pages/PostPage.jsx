@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import CallToAcrion from "../component/CallToAcrion";
 import CommentSection from "../component/CommentSection";
+import PostCard from "../component/PostCard";
 
 export default function PostPage() {
   const { postSlug } = useParams();
@@ -10,6 +11,7 @@ export default function PostPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [post, setPost] = useState(null);
+  const [recentPost, setRecentPost] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -33,6 +35,21 @@ export default function PostPage() {
     };
     fetchPosts();
   }, [postSlug]);
+
+  useEffect(() => {
+    try {
+      const fetchRecentPosts = async () => {
+        const res = await fetch("/api/post/getposts?limit=3");
+        const data = await res.json();
+        if (res.ok) {
+          setRecentPost(data.posts);
+        }
+      };
+      fetchRecentPosts();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, []);
 
   if (loading)
     return (
@@ -72,6 +89,14 @@ export default function PostPage() {
         <CallToAcrion />
       </div>
       <CommentSection postId={post._id} />
+
+      <div className="flex flex-col justify-center items-center mb-5">
+        <h1 className="text-xl mt-5">Recent Articles</h1>
+        <div className="flex flex-col md:flex-row gap-5 mt-5 justify-center">
+          {recentPost &&
+            recentPost.map((post) => <PostCard key={post._id} post={post} />)}
+        </div>
+      </div>
     </main>
   );
 }

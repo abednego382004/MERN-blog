@@ -17,8 +17,5 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [
-    flowbite.plugin(),
-    tailwindScrollbar, // ✅ Add the scrollbar plugin
-  ],
+  plugins: [flowbite.plugin(), tailwindScrollbar],
 };
