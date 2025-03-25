@@ -56,7 +56,6 @@ export default function PostPage() {
       </Link>
       <img
         src={post && post.Image}
-        alt={post.title}
         className="mt-10 p-3 max-h-[600px] w-full object-cover"
       />
       <div className="flex justify-between p-3 border-b border-slate-500 mx-auto w-full max-w-2xl text-xs">
