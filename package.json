@@ -22,7 +22,7 @@
   "homepage": "https://github.com/abednego382004/MERN-blog#readme",
   "dependencies": {
     "bcryptjs": "^3.0.2",
-    "cloudinary": "^2.6.0",
+    "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
