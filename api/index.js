@@ -6,6 +6,7 @@ import authRouter from "./routes/authRoute.js";
 import cookieParser from "cookie-parser";
 import postRouter from "./routes/postRoute.js";
 import commentRouter from "./routes/commentRoutes.js";
+import path from "path";
 
 const app = express();
 
@@ -22,10 +23,18 @@ mongoose
     console.log(e);
   });
 
+const __dirname = path.resolve();
+
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/comment", commentRouter);
+
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 app.listen(5000, () => {
   console.log("api is running on port 5000");
